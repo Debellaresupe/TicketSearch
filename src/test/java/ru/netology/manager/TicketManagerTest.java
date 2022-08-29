@@ -3,6 +3,7 @@ package ru.netology.manager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.netology.comparator.TicketByFlightTimeComparator;
 import ru.netology.ticket.Ticket;
 import ru.netology.manager.TicketManager;
 import ru.netology.repository.TicketRepository;
@@ -10,12 +11,13 @@ import ru.netology.repository.TicketRepository;
 public class TicketManagerTest {
     private TicketRepository repo = new TicketRepository();
     private TicketManager manager = new TicketManager(repo);
-    private Ticket ticket1 = new Ticket(1, 7000, "ASF", "KZN", 100);
-    private Ticket ticket2 = new Ticket(2, 3000, "LED", "KGD", 97);
-    private Ticket ticket3 = new Ticket(3, 3000, "LED", "DME", 70);
+    private Ticket ticket1 = new Ticket(1, 7000, "ASF", "KZN", 200);
+    private Ticket ticket2 = new Ticket(2, 3000, "UFA", "LED", 51);
+    private Ticket ticket3 = new Ticket(3, 3000, "LED", "GOJ", 70);
     private Ticket ticket4 = new Ticket(4, 8000, "ASF", "KZN", 103);
-    private Ticket ticket5 = new Ticket(5, 2000, "GOJ", "IAR", 51);
+    private Ticket ticket5 = new Ticket(5, 2000, "UFA", "LED", 51);
     private Ticket ticket6 = new Ticket(6, 4000, "LED", "GOJ", 105);
+
 
     @BeforeEach
 
@@ -95,5 +97,34 @@ public class TicketManagerTest {
         int actual = 0;
 
         Assertions.assertEquals(expected, actual);
+    }
+    @Test
+    public void shouldSortTicketByFlightTime() {
+        Ticket[] actual = manager.searchAndSortByFlightTime("ASF", "KZN");
+        Ticket[] expected = new Ticket[]{ticket4, ticket1};
+
+        Assertions.assertArrayEquals(expected, actual);
+
+    }
+    @Test
+    public void shouldSortTicketByFlightTimeReverse() {
+
+        manager.add(ticket6);
+
+        Ticket[] actual = manager.searchAndSortByFlightTime("LED", "GOJ");
+        Ticket[] expected = new Ticket[]{ticket3, ticket6};
+
+        Assertions.assertArrayEquals(expected, actual);
+
+    }
+    @Test
+    public void shouldSortTicketByFlightTimeEquals() {
+
+
+        Ticket[] actual = manager.searchAndSortByFlightTime("UFA", "LED");
+        Ticket[] expected = new Ticket[]{ticket2, ticket5};
+
+        Assertions.assertArrayEquals(expected, actual);
+
     }
 }
